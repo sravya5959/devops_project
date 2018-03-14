@@ -3,7 +3,7 @@
 $ip = $_POST['ip'];
 $uname = $_POST['uname'];
 $pass = $_POST['psw'];
-set_include_path('C:/xampp/php/pear/phpseclib');
+set_include_path('phpseclib');
 include('Net/SSH2.php');
 
 $ssh = new Net_SSH2($ip);
