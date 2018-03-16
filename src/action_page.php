@@ -1,8 +1,11 @@
-<!-- need phpseclib installed-->
 <?php
+session_start();
 $ip = $_POST['ip'];
 $uname = $_POST['uname'];
 $pass = $_POST['psw'];
+$_SESSION['ip']=$ip;
+$_SESSION['uname']=$uname;
+$_SESSION['pass']=$pass;
 set_include_path('phpseclib');
 include('Net/SSH2.php');
 
@@ -15,6 +18,7 @@ else
 ?>	
 <!DOCTYPE html>
 <html>
+<head>
 <title>online stats</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -23,7 +27,9 @@ else
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <style>
 html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
+
 </style>
+</head>
 <body class="w3-light-grey">
 
 <!-- Top container -->
@@ -36,11 +42,11 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 <nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;" id="mySidebar"><br>
   <div class="w3-container w3-row">
     <div class="w3-col s4">
-   
+    <!--  <img src="/w3images/avatar2.png" class="w3-circle w3-margin-right" style="width:46px"> -->
     </div>
     <div class="w3-col s8 w3-bar">
       <span>Welcome, <strong><?php echo $uname;?></strong></span><br>
-  
+   
     </div>
   </div>
   <hr>
@@ -49,8 +55,8 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
   </div>
   <div class="w3-bar-block">
     <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="w3_close()" title="close menu"><i class="fa fa-remove fa-fw"></i>  Close Menu</a>
-    <a href="#" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fa fa-users fa-fw"></i>  Overview</a>
-    
+    <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-users fa-fw"></i>  Overview</a>
+    <a href="term.php" class="w3-bar-item w3-button w3-padding"  target="_blank"><i class="fa fa-users fa-fw"></i>  TERMINAL</a>
   </div>
 </nav>
 
@@ -67,10 +73,9 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
   </header>
 
   
- 
   <div class="w3-panel">
     <div class="w3-row-padding" style="margin:0 -16px">
-   
+    
       <div class="w3-twothird">
         <h5>Feeds</h5>
         <table class="w3-table w3-striped w3-white">
@@ -90,7 +95,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 			?></i></td>
           </tr>
           <tr>
-         
+          
             <td>SYSTEM UPTIME</td>
             <td><i><?php 
 			echo $ssh->exec('uptime');
@@ -119,14 +124,27 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 			 echo "kB";
 			?></i></td>
           </tr>
-         
-        </table>
+        
+
+		<tr>
+		<td>SERVICES UP</td>
+		<td><i><?php 
+			 echo $ssh->exec("service --status-all | grep [+] ");
+			?></i></td>
+		</tr>
+		<tr>
+		<td>SERVICES DOWN</td>
+		<td><i><?php 
+			 echo $ssh->exec("service --status-all | grep -v [+] ");
+			 
+			?></i></td>
+		</tr>
+		</table>
       </div>
     </div>
   </div>
   <hr>
- 
-  <!-- End page content -->
+
 </div>
 
 <script>
@@ -152,6 +170,8 @@ function w3_close() {
     mySidebar.style.display = "none";
     overlayBg.style.display = "none";
 }
+
+
 </script>
 
 
