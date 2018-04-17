@@ -1,6 +1,6 @@
 
 <?php
-session_start();	
+session_start();
 	//Me mashing my keyboard, aka uncrackable password.
 	//Don't want to accidentally leave this lying around unsecure.
 set_include_path('phpseclib');
@@ -16,8 +16,8 @@ if (!$ssh->login($uname, $pass)) {
     exit('Login Failed');
 }
 else
-{ 
-	
+{
+
 	$hostname =$ssh->exec('hostname');
 	function clear_command()
 	{
@@ -26,7 +26,7 @@ else
 		} else {
 			$logged_in = FALSE;
 		}
-		
+
 		$_SESSION['persist_commands'] = array();
 		$_SESSION['commands'] = array();
 		$_SESSION['command_responses'] = array();
@@ -37,16 +37,16 @@ else
 	if (isset($_POST['clear']) AND $_POST['clear'] == 'clear') {
 		clear_command();
 	}
-	
+
 	if ( ! isset($_SESSION['persist_commands']) OR ! isset($_SESSION['commands'])) {
 		$_SESSION['persist_commands'] = array();
 		$_SESSION['commands'] = array();
 		$_SESSION['command_responses'] = array();
 	}
-	
+
 	$toggling_persist = FALSE;
 	$toggling_current_persist_command = FALSE;
-	
+
 	if (isset($_POST['persist_command_id']) AND is_numeric($_POST['persist_command_id'])) {
 		$toggling_persist = TRUE;
 		$persist_command_id = $_POST['persist_command_id'];
@@ -57,9 +57,9 @@ else
 				! $_SESSION['persist_commands'][$persist_command_id];
 		}
 	}
-	
+
 	$previous_commands = '';
-	
+
 	foreach ($_SESSION['persist_commands'] as $index => $persist) {
 		if ($persist) {
 			$current_command = $_SESSION['commands'][$index];
@@ -68,7 +68,7 @@ else
 			}
 		}
 	}
-	
+
 	if (isset($_POST['command'])) {
 		$command = $_POST['command'];
 		if ( ! isset($_SESSION['logged_in'])) {
@@ -84,19 +84,19 @@ else
 		} else {
 			if ($command != '' AND ! $toggling_persist) {
 				if ($command == 'logout') {
-					
+
 					$_SESSION['logged_in'] = FALSE;
 					$_SESSION['persist_commands'] = array();
 					$_SESSION['commands'] = array();
 					$_SESSION['command_responses'] = array();
-					
+
 					$response = array('Successfully Logged Out');
 				} elseif ($command == 'clear') {
 					clear_command();
-				} 
-				
+				}
+
 				else {
-					
+
 					$response=$ssh-> exec ($previous_commands . $command);
 				}
 			} else {
@@ -120,8 +120,8 @@ else
 			}
 		}
 	}
-	
-	
+
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -135,8 +135,8 @@ else
 			padding: 0;
 		}
 		body {
-			background-color: #000000;
-			color: #00FF00;
+			background-color: #FFFFFF;
+			color: #000000;
 			font-family: monospace;
 			font-weight: bold;
 			font-size: 12px;
@@ -158,14 +158,14 @@ else
 			overflow: auto;
 		}
 		.terminal {
-			border: 1px solid #00FF00;
+			border: 1px solid #000000;
 			height: 500px;
 			position: relative;
 			overflow: auto;
 			padding-bottom: 20px;
 		}
 		.terminal .bar {
-			border-bottom: 1px solid #00FF00;
+			border-bottom: 1px solid #000000;
 			padding: 2px;
 			white-space: nowrap;
 			overflow: hidden;
@@ -184,7 +184,7 @@ else
 			float: right;
 			border-width: 1px 0 1px 1px;
 			border-style: solid;
-			border-color: #00FF00;
+			border-color: #000000;
 			clear: both;
 		}
 	</style>
@@ -202,7 +202,7 @@ else
 					<?php foreach ($_SESSION['commands'] as $index => $command) { ?>
 					<input type="button" value="<?php if ($_SESSION['persist_commands'][$index]) { ?>Un-Persist<?php } else { ?>Persist<?php } ?>" onfocus="this.style.color='#0000FF';" onblur="this.style.color='';" onclick="toggle_persist_command(<?php echo $index; ?>);" class="persist_button" />
 					<pre><?php echo $uname,'@',$hostname,'$ ',$command,"\n";?></pre>
-					
+
 					<pre><?php if ($command ==''){ echo "\n";} else {echo $_SESSION['command_responses'][$index],"\n";} ?></pre>
 					<?php } ?>
 				</div>
@@ -217,7 +217,7 @@ else
 		</div>
 	</div>
 	<script type="text/javascript">
-		
+
 		<?php
 			$single_quote_cancelled_commands = array();
 			if ( ! empty( $_SESSION['commands'] ) ) {
@@ -228,21 +228,21 @@ else
 				}
 			}
 		?>
-		
+
 		var previous_commands = ['', '<?php echo implode('\', \'', $single_quote_cancelled_commands) ?>', ''];
-		
+
 		var current_command_index = previous_commands.length - 1;
-		
+
 		document.getElementById('command').select();
-		
+
 		document.getElementById('terminal').scrollTop = document.getElementById('terminal').scrollHeight;
-		
+
 		function toggle_persist_command(command_id)
 		{
 			document.getElementById('persist_command_id').value = command_id;
 			document.getElementById('commands').submit();
 		}
-		
+
 		function command_keyed_down(event)
 		{
 			var key_code = get_key_code(event);
@@ -251,7 +251,7 @@ else
 			} else if (key_code == 40) { //Down arrow
 				fill_in_next_command();
 			} else if (key_code == 9) { //Tab
-				
+
 			} else if (key_code == 13) { //Enter
 				if (event.shiftKey) {
 					toggle_persist_command(<?php
@@ -266,7 +266,7 @@ else
 			}
 			return true;
 		}
-		
+
 		function fill_in_previous_command()
 		{
 			current_command_index--;
@@ -276,7 +276,7 @@ else
 			}
 			document.getElementById('command').value = previous_commands[current_command_index];
 		}
-		
+
 		function fill_in_next_command()
 		{
 			current_command_index++;
@@ -286,13 +286,13 @@ else
 			}
 			document.getElementById('command').value = previous_commands[current_command_index];
 		}
-		
+
 		function get_key_code(event)
 		{
 			var event_key_code = event.keyCode;
 			return event_key_code;
 		}
-		
+
 	</script>
 	<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
 		<input type="hidden" name="clear" value="clear" />
@@ -302,4 +302,3 @@ else
 <?php
 }
 ?>
-   
