@@ -15,7 +15,7 @@ if (!$ssh->login($uname, $pass)) {
 }
 else
 {
-?>	
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -46,7 +46,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
     </div>
     <div class="w3-col s8 w3-bar">
       <span>Welcome, <strong><?php echo $uname;?></strong></span><br>
-   
+
     </div>
   </div>
   <hr>
@@ -57,6 +57,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
     <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="w3_close()" title="close menu"><i class="fa fa-remove fa-fw"></i>  Close Menu</a>
     <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-users fa-fw"></i>  Overview</a>
     <a href="term.php" class="w3-bar-item w3-button w3-padding"  target="_blank"><i class="fa fa-users fa-fw"></i>  TERMINAL</a>
+    <a href="http://"<?php echo $ip;?>":6080/vnc.html?host="<?php echo $ip;?>"&port=6080" class="w3-bar-item w3-button w3-padding"  target="_blank"><i class="fa fa-users fa-fw"></i>  GUI</a>
 	<a href="logout.php" class="w3-bar-item w3-button w3-padding"><i class="fa fa-users fa-fw"></i>  LOGOUT</a>
   </div>
 </nav>
@@ -73,11 +74,11 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
     <h5><b><i class="fa fa-dashboard"></i> My Dashboard</b></h5>
   </header>
 
-  
+
   <div class="w3-panel">
     <div class="w3-row-padding" style="margin:0 -16px">
-    
-	
+
+
 	<script>
 	window.onload = function () {
 
@@ -88,7 +89,7 @@ var chart = new CanvasJS.Chart("chartContainer", {
 	},
 	axisY: {
 		includeZero: false
-	},      
+	},
 	data: [{
 		type: "line",
 		dataPoints: dps
@@ -101,14 +102,14 @@ var chart2 = new CanvasJS.Chart("chartContainer2", {
 	},
 	axisY: {
 		includeZero: false
-	},      
+	},
 	data: [{
 		type: "line",
 		dataPoints: dps2
 	}]
 });
 var xVal = 0;
-var yVal = 10; 
+var yVal = 10;
 var updateInterval = 1000;
 var dataLength = 20; // number of dataPoints visible at any point
 
@@ -117,7 +118,7 @@ var updateChart = function (count) {
 	count = count || 1;
 
 	for (var j = 0; j < count; j++) {
-		
+
 		yVal=0;
 		yVal = yVal +  <?php echo $ssh->exec('grep \'cpu \' /proc/stat | awk \'{usage=($2+$4)*100/($2+$4+$5)} END {print usage}\'');?>;
 		dps.push({
@@ -138,7 +139,7 @@ var updateChart2 = function (count) {
 	count = count || 1;
 
 	for (var j = 0; j < count; j++) {
-		
+
 		yVal=0;
 		yVal = yVal +  <?php echo $ssh->exec('free -m | awk \'NR==2{printf "%.2f", $3*100/$2 }\'');?>;
 		dps2.push({
@@ -161,79 +162,79 @@ setInterval(function(){updateChart2()}, updateInterval);
 
 }
 	</script>
-	
-	
-	
+
+
+
 
       <div class="w3-half">
-		
+
         <h5>Feeds</h5>
         <table class="w3-table w3-striped w3-white">
-		
+
           <tr>
-          
+
             <td>HOSTNAME</td>
-			
-            <td><i><?php 
+
+            <td><i><?php
 			 echo $ssh->exec('hostname');
 			?></i></td>
           </tr>
           <tr>
-          
+
             <td>NUMBER OF USERS LOGGED IN</td>
-            <td><i><?php 
+            <td><i><?php
 			 echo $ssh->exec('users | wc -w');
 			?></i></td>
           </tr>
           <tr>
-          
+
             <td>SYSTEM UPTIME</td>
-            <td><i><?php 
+            <td><i><?php
 			echo $ssh->exec('uptime');
 			?></i></td>
           </tr>
-          
+
           <tr>
-           
+
             <td>DISK SPACE LEFT</td>
-            <td><i><?php 
+            <td><i><?php
 			 echo $ssh->exec("df --output=avail | awk '{n += $1}; END{print n }'");
 			 echo "kB";
 			?></i></td>
           </tr>
-        
+
 
 		<tr>
 		<td>SERVICES UP</td>
-		<td><i><?php 
+		<td><i><?php
 			 echo $ssh->exec("service --status-all | grep [+] ");
 			?></i></td>
 		</tr>
 		<tr>
 		<td>SERVICES DOWN</td>
-		<td><i><?php 
+		<td><i><?php
 			 echo $ssh->exec("service --status-all | grep -v [+] ");
-			 
+
 			?></i></td>
 		</tr>
 		</table>
       </div>
 	  <div class="w3-third">
 		<table>
-		<tr> 
+		<tr>
 				<td>
 				<div id="chartContainer" style="height: 300px; width:30%;"></div>
-				<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script> 
+				<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 				</td>
 		</tr>
 		<tr>
 				<td>
 				<div id="chartContainer2" style="height: 300px; width:30%;"></div>
-				<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script> 
+				<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 				</td>
 		</tr>
 		</table>
-	
+
 	  </div>
     </div>
   </div>
@@ -271,8 +272,8 @@ function w3_close() {
 
 
 
-<?php 
-	
+<?php
+
 }
 
 ?>
