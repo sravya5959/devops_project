@@ -57,7 +57,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
     <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="w3_close()" title="close menu"><i class="fa fa-remove fa-fw"></i>  Close Menu</a>
     <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-users fa-fw"></i>  Overview</a>
     <a href="term.php" class="w3-bar-item w3-button w3-padding"  target="_blank"><i class="fa fa-users fa-fw"></i>  TERMINAL</a>
-    <a href="http://"<?php echo $ip;?>":6080/vnc.html?host="<?php echo $ip;?>"&port=6080" class="w3-bar-item w3-button w3-padding"  target="_blank"><i class="fa fa-users fa-fw"></i>  GUI</a>
+    <a href=<?php echo "http://$ip:6080/vnc.html?host=$ip&port=6080";?> class="w3-bar-item w3-button w3-padding"  target="_blank"><i class="fa fa-users fa-fw"></i>  GUI</a>
 	<a href="logout.php" class="w3-bar-item w3-button w3-padding"><i class="fa fa-users fa-fw"></i>  LOGOUT</a>
   </div>
 </nav>
