@@ -15,6 +15,7 @@ if (!$ssh->login($uname, $pass)) {
 }
 else
 {
+	require_once('hicounter.php');
 ?>
 <!DOCTYPE html>
 <html>
